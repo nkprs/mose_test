@@ -1,9 +1,9 @@
-import { FastifyInstance } from "fastify";
-import { createFeed, getFeed } from "../controller/feed";
+import {FastifyInstance} from 'fastify';
+import {createFeed, getFeed} from '../controller/feed';
 
-export default function(server: FastifyInstance) {
+export default function (server: FastifyInstance) {
     const redis = server.redis;
-    
+
     server.post(
         '/',
         {
@@ -12,35 +12,35 @@ export default function(server: FastifyInstance) {
                 body: {
                     type: 'object',
                     properties: {
-                        search: { type: 'string', minLength: 1 }
+                        search: {type: 'string', minLength: 1},
                     },
-                    required: ['search']
-                }
-            }
+                    required: ['search'],
+                },
+            },
         },
         async (request, reply) => {
-            const { search } = request.body as { search: string };
+            const {search} = request.body as {search: string};
 
             try {
-                const id = await createFeed(redis, search)
-    
+                const id = await createFeed(redis, search);
+
                 reply.send({
                     success: true,
                     data: {
-                        id
-                    }
-                })
-            } catch(err) {
+                        id,
+                    },
+                });
+            } catch (err) {
                 reply.send({
                     success: false,
                     error: {
                         message: 'Не удалось найти изображения',
-                        details: err
-                    }
-                })
+                        details: err,
+                    },
+                });
             }
         }
-    )
+    );
 
     server.get(
         '/:feedId',
@@ -50,31 +50,31 @@ export default function(server: FastifyInstance) {
                 params: {
                     type: 'object',
                     properties: {
-                        feedId: { type: 'number', minimum: 1 }
+                        feedId: {type: 'number', minimum: 1},
                     },
-                    required: ['feedId']
-                }
-            }
+                    required: ['feedId'],
+                },
+            },
         },
         async (request, reply) => {
-            const { feedId } = request.params as { feedId: number };
+            const {feedId} = request.params as {feedId: number};
 
             try {
-                const feed = await getFeed(redis, feedId)
+                const feed = await getFeed(redis, feedId);
 
                 reply.send({
                     success: true,
-                    data: feed
-                })
-            } catch(err) {
+                    data: feed,
+                });
+            } catch (err) {
                 reply.send({
                     success: false,
                     error: {
                         message: 'Не удалось получить изображения',
-                        details: err
-                    }
-                })
+                        details: err,
+                    },
+                });
             }
         }
-    )
+    );
 }
