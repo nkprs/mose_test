@@ -1,0 +1,24 @@
+{
+  "name": "mose_test",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "ts-node-dev -r tsconfig-paths/register -r dotenv/config src/index dotenv_config_path=.env.dev --dev",
+    "start": "ts-node --transpile-only -r tsconfig-paths/register src/index"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "dotenv": "^16.4.7",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@fastify/redis": "^7.0.2",
+    "fastify": "^5.2.1",
+    "ts-node": "^10.9.2"
+  }
+}

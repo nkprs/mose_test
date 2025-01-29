@@ -1,0 +1,49 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+    networks:
+      - redis_network
+    volumes:
+      - redis_data:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    tty: true
+    stdin_open: true
+
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node-app
+    ports:
+      - "3030:3030"
+    depends_on:
+      - redis
+    networks:
+      - redis_network
+    links:
+      - redis
+
+networks:
+  redis_network:
+    driver: bridge
+
+volumes:
+  redis_data:
