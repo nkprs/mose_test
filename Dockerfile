@@ -2,7 +2,7 @@ FROM node:22.13.1-alpine
 
 WORKDIR /app
 COPY . .
-RUN npm install
+RUN npm ci
 
 EXPOSE 3030
 
